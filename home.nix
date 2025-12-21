@@ -15,6 +15,7 @@
     pinentry_mac
     python314
     shellcheck
+    xcodegen
   ];
 
   # Emacs-Plus for Mac / Emacs for Arch

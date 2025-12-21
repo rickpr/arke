@@ -25,6 +25,7 @@
 
     casks = [
       "ghostty"
+      "devcleaner"
     ];
   };
   
