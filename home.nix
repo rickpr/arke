@@ -3,14 +3,18 @@
   home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/fdisk" else "/home/fdisk";
 
   home.packages = with pkgs; [
+    coreutils
     direnv
+    fontconfig
     gnupg
     nix-direnv
     ripgrep
     fd
     fzf
+    pandoc
     pinentry_mac
     python314
+    shellcheck
   ];
 
   # Emacs-Plus for Mac / Emacs for Arch
@@ -28,6 +32,9 @@
 
   programs.zsh = {
     enable = true;
+    autosuggestion.enable = true; # Suggests commands as you type (gray text)
+    syntaxHighlighting.enable = true; # Colors commands as you type (red/green)
+
     initContent = ''
       [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
       [[ ! -f ~/.zshrc_local ]] || source ~/.zshrc_local
@@ -53,6 +60,10 @@
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
     ];
+
+    sessionVariables = {
+      PATH = "$HOME/.config/emacs/bin:$PATH";
+    };
   };
 
   programs.zsh.shellAliases = {
@@ -89,6 +100,7 @@
     default-cache-ttl 600
     max-cache-ttl 7200
   '';
+  home.file.".emacs.d".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/emacs";
 
   home.stateVersion = "25.11";
 }

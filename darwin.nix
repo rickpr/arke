@@ -7,6 +7,8 @@
     pkgs.pinentry_mac
   ];
 
+  fonts.packages = [ pkgs.nerd-fonts.inconsolata ];
+
   homebrew = {
     enable = true;
     onActivation.cleanup = "zap"; # "zap" means Nix will UNINSTALL anything not in this list
