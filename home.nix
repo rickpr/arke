@@ -29,8 +29,30 @@
   programs.zsh = {
     enable = true;
     initContent = ''
+      [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+      [[ ! -f ~/.zshrc_local ]] || source ~/.zshrc_local
       eval "$(direnv hook zsh)"
     '';
+ 
+    # 1. Enable Oh-My-Zsh
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ 
+        "git" 
+        "sudo" 
+        "docker" 
+        "colored-man-pages" 
+        "direnv"
+      ] ++ (if pkgs.stdenv.isDarwin then [ "brew" "macos" ] else [ "archlinux" ]);
+    };
+
+    plugins = [
+      {
+        name = "powerlevel10k";
+        src = pkgs.zsh-powerlevel10k;
+        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+      }
+    ];
   };
 
   programs.zsh.shellAliases = {
