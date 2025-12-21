@@ -1,0 +1,7 @@
+font-family = "Inconsolata Nerd Font"
+font-size = 19
+keybind = global:cmd+shift+backquote=toggle_quick_terminal
+custom-shader = ./shaders/cubes.glsl
+custom-shader = ./shaders/cursor_blaze.glsl
+custom-shader = ./shaders/glow-rgbsplit-twitchy.glsl
+theme = Oceanic Next

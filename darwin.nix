@@ -1,13 +1,25 @@
-{ pkgs, config, ... }: {
-  imports = [ ./common.nix ];
-  system.primaryUser = "fdisk";
+{
+  pkgs,
+  config,
+  user,
+  ...
+}: {
+  imports = [./common.nix];
+  system.primaryUser = user;
+
+  nix.settings = {
+    experimental-features = ["nix-command" "flakes"];
+  };
 
   environment.systemPackages = [
     pkgs.neovim
     pkgs.pinentry_mac
   ];
 
-  fonts.packages = [ pkgs.nerd-fonts.inconsolata ];
+  fonts.packages = [
+    pkgs.nerd-fonts.inconsolata
+    pkgs.nerd-fonts.symbols-only
+  ];
 
   homebrew = {
     enable = true;
@@ -19,16 +31,16 @@
     # masApps = { "Xcode" = 497799835; };
 
     # taps = [ "d12frosted/emacs-plus" ]; # If you decide to go Brew for Emacs too
-    
+
     # CLI tools via Brew (only if Nix version is broken)
-    # brews = [ "cocoapods" ];
+    brews = ["xcodegen"];
 
     casks = [
       "ghostty"
       "devcleaner"
     ];
   };
-  
+
   # The NS Settings (Autocorrect Kill-switch)
   system.defaults.NSGlobalDomain = {
     NSAutomaticSpellingCorrectionEnabled = false;
@@ -42,13 +54,13 @@
     echo "Syncing Nix Apps..." >&2
     rm -rf "/Applications/Nix Apps"
     mkdir -p "/Applications/Nix Apps"
-    
+
     # Define paths to search
     # 1. System-wide Apps
     # 2. User-profile Apps (Home Manager)
     paths=(
       "/run/current-system/sw/Applications"
-      "/etc/profiles/per-user/fdisk/Applications"
+      "/etc/profiles/per-user/${user}/Applications"
     )
 
     for src in "''${paths[@]}"; do
@@ -58,11 +70,11 @@
     done
   '';
 
-
   # Native Postgres setup
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_17;
+    dataDir = "/Users/${user}/Library/Application Support/Postgres";
   };
 
   networking.computerName = "juno"; # The "Human" name (AirDrop, Finder)

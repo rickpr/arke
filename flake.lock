@@ -39,6 +39,22 @@
         "type": "github"
       }
     },
+    "ghostty-shaders": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1762759106,
+        "narHash": "sha256-5c3WBG3Litw/ayLI6mlCoGw+EIHrj3vkgc4j8+4K0OY=",
+        "owner": "0xhckr",
+        "repo": "ghostty-shaders",
+        "rev": "01738211b26a60eac33119d6da0c7bb12763e683",
+        "type": "github"
+      },
+      "original": {
+        "owner": "0xhckr",
+        "repo": "ghostty-shaders",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -107,12 +123,30 @@
         "type": "github"
       }
     },
+    "oh-my-tmux": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1763024552,
+        "narHash": "sha256-0suqQJvB7OfUuxw8ruRbBOSjv+hHy2mfwsvJKbg5csQ=",
+        "owner": "gpakosz",
+        "repo": ".tmux",
+        "rev": "5b34d9a873b8bfe608004d59b08e81389ce7b6a9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gpakosz",
+        "repo": ".tmux",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
         "emacs-overlay": "emacs-overlay",
+        "ghostty-shaders": "ghostty-shaders",
         "home-manager": "home-manager",
-        "npkgs": "npkgs"
+        "npkgs": "npkgs",
+        "oh-my-tmux": "oh-my-tmux"
       }
     }
   },
