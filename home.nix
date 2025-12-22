@@ -26,15 +26,16 @@
     fd
     fzf
     nodejs
+    nodePackages.firebase-tools
     nodePackages.stylelint
     nodePackages.js-beautify
     openssl
     pandoc
     pinentry_mac
-    pipenv
     pkg-config
     python314
     shellcheck
+    uv
 
     (writeShellScriptBin "gls" "exec ${coreutils}/bin/ls \"$@\"")
   ];

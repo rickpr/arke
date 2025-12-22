@@ -33,7 +33,10 @@
     # taps = [ "d12frosted/emacs-plus" ]; # If you decide to go Brew for Emacs too
 
     # CLI tools via Brew (only if Nix version is broken)
-    brews = ["xcodegen"];
+    brews = [
+      "xcodegen"
+      "swiftlint"
+    ];
 
     casks = [
       "ghostty"
