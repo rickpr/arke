@@ -2,6 +2,7 @@
   pkgs,
   config,
   user,
+  vars,
   ...
 }: {
   imports = [./common.nix];
@@ -80,9 +81,9 @@
     dataDir = "/Users/${user}/Library/Application Support/Postgres";
   };
 
-  networking.computerName = "juno"; # The "Human" name (AirDrop, Finder)
-  networking.hostName = "juno"; # The DNS name (Terminal, SSH)
-  networking.localHostName = "juno"; # The Bonjour name (.local)
+  networking.computerName = vars.macHostname; # The "Human" name (AirDrop, Finder)
+  networking.hostName = vars.macHostname; # The DNS name (Terminal, SSH)
+  networking.localHostName = vars.macHostname; # The Bonjour name (.local)
 
   system.stateVersion = 5;
 }

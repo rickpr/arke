@@ -5,6 +5,7 @@
   ghostty-shaders,
   oh-my-tmux,
   user,
+  vars,
   ...
 }: {
   home.username = user;
@@ -16,6 +17,7 @@
   home.packages = with pkgs; [
     cmake
     coreutils
+    delta
     direnv
     fontconfig
     gnupg
@@ -115,15 +117,21 @@
     settings = {
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
-      core.editor = "nvim";
       credential.helper =
         if pkgs.stdenv.isDarwin
         then "osxkeychain"
         else "cache";
+      core = {
+        editor = "nvim";
+        pager = "delta";
+      };
+      interactive.diffFilter = "delta --color-only";
+      delta.navigate = true;
+      merge.conflictStyle = "zdiff3";
       user = {
-        name = user;
-        email = "ricardo@gaintain.co";
-        signingkey = "90C13A2BD265293A";
+        name = vars.fullName;
+        email = vars.email;
+        signingkey = vars.signingKey;
       };
     };
   };

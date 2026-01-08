@@ -37,25 +37,23 @@
     oh-my-tmux,
     ...
   }: let
-    user = "fdisk";
-    macSystem = "aarch64-darwin";
-    linuxSystem = "x86_64-linux";
+    vars = import ./variables.nix;
   in {
     # MacOS Configuration: Run with `darwin-rebuild switch --flake .#macbook`
     darwinConfigurations.macbook = darwin.lib.darwinSystem {
-      system = macSystem;
-      specialArgs = {inherit emacs-overlay user ghostty-shaders;};
+      system = vars.macSystem;
+      specialArgs = {inherit emacs-overlay ghostty-shaders vars; user = vars.user;};
       modules = [
         ./darwin.nix
         home-manager.darwinModules.home-manager
         {
           nixpkgs.overlays = [emacs-overlay.overlays.default];
-          users.users.${user}.home = "/Users/${user}";
+          users.users.${vars.user}.home = "/Users/${vars.user}";
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            users.${user} = ./home.nix;
-            extraSpecialArgs = {inherit emacs-overlay user ghostty-shaders oh-my-tmux;};
+            users.${vars.user} = ./home.nix;
+            extraSpecialArgs = {inherit emacs-overlay ghostty-shaders oh-my-tmux vars; user = vars.user;};
           };
         }
       ];
@@ -63,9 +61,9 @@
 
     # Arch Home Configuration: Run with `home-manager switch --flake .#arch`
     homeConfigurations.arch = home-manager.lib.homeManagerConfiguration {
-      pkgs = npkgs.legacyPackages.${linuxSystem};
+      pkgs = npkgs.legacyPackages.${vars.linuxSystem};
       modules = [./home.nix];
-      extraSpecialArgs = {inherit emacs-overlay;};
+      extraSpecialArgs = {inherit emacs-overlay vars; user = vars.user;};
     };
   };
 }
