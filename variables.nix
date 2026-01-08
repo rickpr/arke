@@ -1,6 +1,6 @@
 {
   user = "fdisk";
-  fullName = "fdisk";
+  fullName = "Ricardo Piro-Rael";
   email = "ricardo@gaintain.co";
   signingKey = "90C13A2BD265293A";
   macHostname = "juno";
