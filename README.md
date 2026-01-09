@@ -6,7 +6,8 @@
 ### *First Principles for a Sovereign Developer Environment*
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
-![Installation Demo](https://github.com/user-attachments/assets/0321e3a0-cfad-4e18-8ab8-f7840e654bd0)
+![Installation Demo](https://github.com/user-attachments/assets/df8574cd-b33b-4ddd-8a58-248422b403be)
+
 
 </div>
 
