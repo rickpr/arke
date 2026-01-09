@@ -156,9 +156,9 @@
 
     # The local overrides MUST be in the root of home as .tmux.conf.local
     ".tmux.conf".source = "${oh-my-tmux}/.tmux.conf";
-    ".tmux.conf.local".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/dotfiles/tmux.conf.local";
+    ".tmux.conf.local".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/arke/dotfiles/tmux.conf.local";
   };
-  xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/dotfiles/ghostty-config";
+  xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/arke/dotfiles/ghostty-config";
   xdg.configFile."ghostty/shaders".source = ghostty-shaders;
 
   home.stateVersion = "25.11";

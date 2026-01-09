@@ -31,7 +31,7 @@ To maintain a truly independent and community-driven system, we recommend sidest
 2. **Clone this repository**
    ```bash
    git clone https://github.com/rickpr/arke.git
-   cd nix-config
+   cd arke
    ```
 
 3. **Configure your Variables**  
