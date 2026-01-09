@@ -10,23 +10,12 @@
 
 ---
 
-## 🏛️ Philosophy
+## 🚀 Getting Started (macOS)
 
-**ἀρχή** (Arke) is a Greek word meaning "origin", "beginning", or "first principle". 
-
-This configuration is built on the belief that a developer's environment should be:
-1. **Reproducible**: Built from source and logic, not ad-hoc commands.
-2. **Simple**: Implementation simplicity beats interface complexity ("Worse is Better").
-3. **Sovereign**: Free from corporate lock-in and centralized control.
-
-## 🛡️ Sovereignty & Lix
-
-To maintain a truly independent and community-driven system, we recommend sidestepping standard Nix in favor of **[Lix](https://lix.systems)**. Lix is a robust, compatible, and independent implementation that ensures your configuration remains yours.
-
-### 💿 Installation (macOS)
+Arke uses **[Lix](https://lix.systems)**, a robust and independent Nix implementation. 
 
 1. **Install Lix**  
-   Follow the official instructions at [lix.systems/install](https://lix.systems/install) to get the sovereign Nix implementation.
+   Follow the official instructions at [lix.systems/install](https://lix.systems/install).
 
 2. **Clone this repository**
    ```bash
@@ -34,8 +23,8 @@ To maintain a truly independent and community-driven system, we recommend sidest
    cd arke
    ```
 
-3. **Configure your Variables**  
-   Edit `variables.nix` to match your local system details:
+3. **Configure Variables**  
+   Edit `variables.nix` to match your local system:
    ```nix
    {
      user = "your_user";
@@ -62,20 +51,31 @@ To maintain a truly independent and community-driven system, we recommend sidest
 - **`home.nix`**: Home Manager configuration (Git, Zsh, Emacs, Ghostty).
 - **`common.nix`**: Shared packages across all platforms.
 
-## 🚀 Advanced Git
+## 🛠️ Advanced Git
 This setup includes **Git Delta** for beautiful, readable diffs and **zdiff3** for smarter conflict resolution.
 
 ## 💡 Tips & Gotchas
 
 ### 🚪 Escape Hatches
-While this config aims to be comprehensive, you may need machine-specific tweaks that you don't want to commit:
-- **Zsh**: The config automatically sources `~/.zshrc_local` if it exists. Use this for private PATH exports, aliases, or secret environment variables.
-- **Identity**: All personal identifiers (email, GPG, hostname) are centralized in `variables.nix`.
+While this config aims to be comprehensive, you may need machine-specific tweaks:
+- **Zsh**: The config automatically sources `~/.zshrc_local` if it exists.
+- **Identity**: All personal identifiers is centralized in `variables.nix`.
 
 ### ⚠️ The "Clobbering" Problem
-Home Manager is protective of your `$HOME`. If you already have a `.zshrc`, `.tmux.conf`, or `.emacs.d` folder, the build will **fail** rather than overwrite your data.
-- **Solution**: Before your first run, move your existing config files to a backup (e.g., `mv ~/.zshrc ~/.zshrc_local`). Home Manager will then create the appropriate symlinks.
+Home Manager will **fail** if it detects existing config files like `.zshrc` or `.emacs.d`.
+- **Solution**: Before your first run, move existing config files to a backup (e.g., `mv ~/.zshrc ~/.zshrc_local`).
 
 ### 🛠️ Manual Interventions
-- **Postgres**: This config manages the Postgres service, but you may need to initialize the data directory or start the service manually the first time using `brew services` or `pg_ctl` depending on your setup.
-- **Ghostty Shaders**: Shaders are included via a Git submodule/input and symlinked automatically.
+- **Postgres**: Managed as a service, but may need manual initialization or starting (`brew services` or `pg_ctl`).
+- **Ghostty Shaders**: Included via Git submodule and symlinked automatically.
+
+## 🏛️ Principles
+
+**ἀρχή** (Arke) means "first principle". This environment is built on:
+1. **Reproducibility**: Built from source and logic, not ad-hoc commands.
+2. **Simplicity**: Embracing "Worse is Better" for implementation simplicity.
+3. **Sovereignty**: Free from corporate lock-in, preferring **[Lix](https://lix.systems)** for a community-driven experience.
+
+## ⚖️ License
+
+This project is released into the public domain via the [Unlicense](LICENSE).
