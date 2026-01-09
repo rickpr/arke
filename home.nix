@@ -20,6 +20,7 @@
     delta
     direnv
     fontconfig
+    ffmpeg
     gnupg
     ktlint
     libtool
@@ -32,6 +33,7 @@
     nodePackages.stylelint
     nodePackages.js-beautify
     openssl
+    opencode
     pandoc
     pinentry_mac
     pkg-config
@@ -110,6 +112,17 @@
   programs.zsh.shellAliases = {
     vim = "nvim";
     vi = "nvim";
+  };
+
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    bashrcExtra = ''
+      [[ ! -f ~/.bashrc_local ]] || source ~/.bashrc_local
+      eval "$(direnv hook bash)"
+    '';
+    shellAliases = config.programs.zsh.shellAliases;
+    sessionVariables = config.programs.zsh.sessionVariables;
   };
 
   programs.git = {

@@ -6,9 +6,12 @@
 ### *First Principles for a Sovereign Developer Environment*
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
+![Installation Demo](https://github.com/user-attachments/assets/0321e3a0-cfad-4e18-8ab8-f7840e654bd0)
+
 </div>
 
 ---
+
 
 ## 🚀 Getting Started (macOS)
 
@@ -43,12 +46,54 @@ Arke uses **[Lix](https://lix.systems)**, a robust and independent Nix implement
    ./build_macos.sh
    ```
 
+## ❓ Why Arke?
+
+Why use Nix/Lix instead of a standard Homebrew setup or a collection of Bash scripts?
+
+| Feature | Arke (Nix/Lix) | Homebrew / Bash Scripts |
+| :--- | :--- | :--- |
+| **State** | **Declarative**: The code *is* the state. | **Imperative**: You hope the scripts ran correctly. |
+| **Reliability** | **Atomic**: Builds either succeed or fail completely. | **Fragile**: Scripts can fail halfway, leaving a mess. |
+| **Reproducibility** | **Identical**: Same config = same environment. | **Drift**: Versions drift over time across machines. |
+| **Rollbacks** | **Instant**: Switch back to any previous generation. | **Manual**: Good luck undoing a broken script. |
+| **Isolation** | **Sandboxed**: Packages don't bleed into each other. | **Global**: One update can break other dependencies. |
+
+## 📦 Managing Dependencies
+
+Arke splits dependency management between **Nix (Lix)** for CLI tools and development environments, and **Homebrew** for macOS-specific apps and casks.
+
+### 1. CLI Tools (Nix)
+Most of your terminal-based tools should go in `home.nix`.
+- **File**: [`home.nix`](file:///Users/fdisk/arke/home.nix)
+- **Key**: `home.packages`
+- **Example**:
+  ```nix
+  home.packages = with pkgs; [
+    ripgrep
+    fd
+    ffmpeg
+    # Add your new tools here
+  ];
+  ```
+
+### 2. macOS Apps & Binaries (Homebrew)
+For things that are better managed via Brew (like GUI apps or specific Mac binaries), use `darwin.nix`.
+- **File**: [`darwin.nix`](file:///Users/fdisk/arke/darwin.nix)
+- **Keys**: `homebrew.brews` (CLI) and `homebrew.casks` (GUI)
+- **Example**:
+  ```nix
+  homebrew = {
+    brews = [ "xcodegen" ];
+    casks = [ "ghostty" "postman" ];
+  };
+  ```
+
 ## ⚙️ Architecture
 
 - **`flake.nix`**: The entry point, orchestrating outputs for macOS and Linux.
 - **`variables.nix`**: Your centralized identity and hardware configuration.
 - **`darwin.nix`**: macOS system-level settings and Homebrew integration.
-- **`home.nix`**: Home Manager configuration (Git, Zsh, Emacs, Ghostty).
+- **`home.nix`**: Home Manager configuration (Git, Zsh, Bash, Emacs, Ghostty).
 - **`common.nix`**: Shared packages across all platforms.
 
 ## 🛠️ Advanced Git
@@ -58,7 +103,7 @@ This setup includes **Git Delta** for beautiful, readable diffs and **zdiff3** f
 
 ### 🚪 Escape Hatches
 While this config aims to be comprehensive, you may need machine-specific tweaks:
-- **Zsh**: The config automatically sources `~/.zshrc_local` if it exists.
+- **Shells**: The config automatically sources `~/.zshrc_local` for Zsh or `~/.bashrc_local` for Bash if they exist.
 - **Identity**: All personal identifiers is centralized in `variables.nix`.
 
 ### ⚠️ The "Clobbering" Problem
