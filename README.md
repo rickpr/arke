@@ -4,6 +4,7 @@
 
 # ἀρχή (Arke)
 ### *First Principles for a Sovereign Developer Environment*
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
 </div>
 
