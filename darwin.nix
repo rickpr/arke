@@ -42,6 +42,7 @@
     casks = [
       "ghostty"
       "devcleaner"
+      "linearmouse"
     ];
   };
 
