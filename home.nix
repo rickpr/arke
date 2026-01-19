@@ -28,6 +28,7 @@
     ripgrep
     fd
     fzf
+    netlify-cli
     nodejs
     nodePackages.firebase-tools
     nodePackages.stylelint
