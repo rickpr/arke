@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   emacs-overlay,
   ghostty-shaders,
@@ -22,6 +23,7 @@
     fontconfig
     ffmpeg
     gnupg
+    jq
     ktlint
     libtool
     nix-direnv
@@ -36,13 +38,18 @@
     openssl
     opencode
     pandoc
-    pinentry_mac
     pkg-config
     python314
     shellcheck
     uv
 
     (writeShellScriptBin "gls" "exec ${coreutils}/bin/ls \"$@\"")
+  ] ++ lib.optionals pkgs.stdenv.isDarwin [
+    pinentry_mac
+  ] ++ lib.optionals pkgs.stdenv.isLinux [
+    neovim
+    tmux
+    pinentry-gtk2
   ];
 
   # Emacs-Plus for Mac / Emacs for Arch
@@ -73,6 +80,12 @@
     # 1. Enable Oh-My-Zsh
     oh-my-zsh = {
       enable = true;
+      theme = "powerlevel10k/powerlevel10k";
+      # Create a ZSH_CUSTOM dir with the right theme directory structure
+      custom = toString (pkgs.runCommand "omz-custom" {} ''
+        mkdir -p $out/themes
+        ln -s ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k $out/themes/powerlevel10k
+      '');
       plugins =
         [
           "git"
@@ -87,14 +100,6 @@
           else ["archlinux"]
         );
     };
-
-    plugins = [
-      {
-        name = "powerlevel10k";
-        src = pkgs.zsh-powerlevel10k;
-        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-      }
-    ];
 
     sessionVariables = {
       PATH = "$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
@@ -156,15 +161,24 @@
     # settings = { ... }; # Optional: Add your keyserver or default-key here
   };
 
-  # 3. Configure the Agent (This is the tricky part on Mac)
-  # Home Manager's services.gpg-agent works on Linux, but on Mac,
-  # it's better to manually link the config to point to pinentry-mac.
+  # 3. Configure the Agent
+  # On Linux, home-manager manages the gpg-agent service via systemd.
+  # On Mac, it's better to manually write the config pointing to pinentry-mac.
+  services.gpg-agent = lib.mkIf pkgs.stdenv.isLinux {
+    enable = true;
+    defaultCacheTtl = 600;
+    maxCacheTtl = 7200;
+    pinentry.package = pkgs.pinentry-gtk2;
+  };
+
   home.file = {
-    ".gnupg/gpg-agent.conf".text = ''
-      pinentry-program ${pkgs.pinentry_mac}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac
-      default-cache-ttl 600
-      max-cache-ttl 7200
-    '';
+    ".gnupg/gpg-agent.conf" = lib.mkIf pkgs.stdenv.isDarwin {
+      text = ''
+        pinentry-program ${pkgs.pinentry_mac}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac
+        default-cache-ttl 600
+        max-cache-ttl 7200
+      '';
+    };
 
     ".emacs.d".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/emacs";
 
