@@ -59,11 +59,11 @@
       ];
     };
 
-    # Arch Home Configuration: Run with `home-manager switch --flake .#arch`
-    homeConfigurations.arch = home-manager.lib.homeManagerConfiguration {
+    # Arch Home Configuration: Run with `home-manager switch --flake .#linux`
+    homeConfigurations.linux = home-manager.lib.homeManagerConfiguration {
       pkgs = npkgs.legacyPackages.${vars.linuxSystem};
       modules = [./home.nix];
-      extraSpecialArgs = {inherit emacs-overlay vars; user = vars.user;};
+      extraSpecialArgs = {inherit emacs-overlay ghostty-shaders oh-my-tmux vars; user = vars.user;};
     };
   };
 }
