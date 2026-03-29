@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Make sure Lix and Home Manager are installed first!
 
 echo "Building Arke for Arch Linux..."
 cat arke.txt
