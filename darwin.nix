@@ -35,6 +35,7 @@
 
     # CLI tools via Brew (only if Nix version is broken)
     brews = [
+      "ispell"
       "xcodegen"
       "swiftlint"
     ];

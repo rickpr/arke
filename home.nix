@@ -45,115 +45,118 @@
     (writeShellScriptBin "gls" "exec ${coreutils}/bin/ls \"$@\"")
   ];
 
-  # Emacs-Plus for Mac / Emacs for Arch
-  programs.emacs = {
-    enable = true;
-    package =
-      if pkgs.stdenv.isDarwin
-      then pkgs.emacs-unstable # Use overlay for emacs-plus features
-      else pkgs.emacs;
-  };
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-
-  programs.zsh = {
-    enable = true;
-    autosuggestion.enable = true; # Suggests commands as you type (gray text)
-    syntaxHighlighting.enable = true; # Colors commands as you type (red/green)
-
-    initContent = ''
-      [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-      [[ ! -f ~/.zshrc_local ]] || source ~/.zshrc_local
-      eval "$(direnv hook zsh)"
-    '';
-
-    # 1. Enable Oh-My-Zsh
-    oh-my-zsh = {
+  programs = {
+    # Emacs-Plus for Mac / Emacs for Arch
+    emacs = {
       enable = true;
-      plugins =
-        [
-          "git"
-          "sudo"
-          "docker"
-          "colored-man-pages"
-          "direnv"
-        ]
-        ++ (
-          if pkgs.stdenv.isDarwin
-          then ["brew" "macos"]
-          else ["archlinux"]
-        );
-    };
-
-    plugins = [
-      {
-        name = "powerlevel10k";
-        src = pkgs.zsh-powerlevel10k;
-        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-      }
-    ];
-
-    sessionVariables = {
-      PATH = "$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-    };
-
-    shellAliases = {
-      ls = "gls --color=auto";
-      ll = "ls -laF --color=auto";
-      la = "ls -A --color=auto";
-      l = "ls -CF --color=auto";
-    };
-  };
-
-  programs.zsh.shellAliases = {
-    vim = "nvim";
-    vi = "nvim";
-  };
-
-  programs.bash = {
-    enable = true;
-    enableCompletion = true;
-    bashrcExtra = ''
-      [[ ! -f ~/.bashrc_local ]] || source ~/.bashrc_local
-      eval "$(direnv hook bash)"
-    '';
-    shellAliases = config.programs.zsh.shellAliases;
-    sessionVariables = config.programs.zsh.sessionVariables;
-  };
-
-  programs.git = {
-    enable = true;
-    settings = {
-      init.defaultBranch = "main";
-      push.autoSetupRemote = true;
-      credential.helper =
+      package =
         if pkgs.stdenv.isDarwin
-        then "osxkeychain"
-        else "cache";
-      core = {
-        editor = "nvim";
-        pager = "delta";
+        then pkgs.emacs-unstable # Use overlay for emacs-plus features
+        else pkgs.emacs;
+    };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    java = {
+      enable = true;
+      package = pkgs.jdk;
+    };
+
+    zsh = {
+      enable = true;
+      autosuggestion.enable = true; # Suggests commands as you type (gray text)
+      syntaxHighlighting.enable = true; # Colors commands as you type (red/green)
+
+      initContent = ''
+        [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+        [[ ! -f ~/.zshrc_local ]] || source ~/.zshrc_local
+        eval "$(direnv hook zsh)"
+      '';
+
+      # 1. Enable Oh-My-Zsh
+      oh-my-zsh = {
+        enable = true;
+        plugins =
+          [
+            "git"
+            "sudo"
+            "docker"
+            "colored-man-pages"
+            "direnv"
+          ]
+          ++ (
+            if pkgs.stdenv.isDarwin
+            then ["brew" "macos"]
+            else ["archlinux"]
+          );
       };
-      interactive.diffFilter = "delta --color-only";
-      delta.navigate = true;
-      merge.conflictStyle = "zdiff3";
-      user = {
-        name = vars.fullName;
-        email = vars.email;
-        signingkey = vars.signingKey;
+
+      plugins = [
+        {
+          name = "powerlevel10k";
+          src = pkgs.zsh-powerlevel10k;
+          file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+        }
+      ];
+
+      sessionVariables = {
+        NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
+        PATH = "$HOME/.npm-global/bin:$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      };
+
+      shellAliases = {
+        ls = "gls --color=auto";
+        ll = "ls -laF --color=auto";
+        la = "ls -A --color=auto";
+        l = "ls -CF --color=auto";
+        vim = "nvim";
+        vi = "nvim";
       };
     };
-  };
 
-  # 2. Configure GPG
-  programs.gpg = {
-    enable = true;
-    # settings = { ... }; # Optional: Add your keyserver or default-key here
+    bash = {
+      enable = true;
+      enableCompletion = true;
+      bashrcExtra = ''
+        [[ ! -f ~/.bashrc_local ]] || source ~/.bashrc_local
+        eval "$(direnv hook bash)"
+      '';
+      shellAliases = config.programs.zsh.shellAliases;
+      sessionVariables = config.programs.zsh.sessionVariables;
+    };
+
+    git = {
+      enable = true;
+      settings = {
+        init.defaultBranch = "main";
+        push.autoSetupRemote = true;
+        credential.helper =
+          if pkgs.stdenv.isDarwin
+          then "osxkeychain"
+          else "cache";
+        core = {
+          editor = "nvim";
+          pager = "delta";
+        };
+        interactive.diffFilter = "delta --color-only";
+        delta.navigate = true;
+        merge.conflictStyle = "zdiff3";
+        user = {
+          name = vars.fullName;
+          email = vars.email;
+          signingkey = vars.signingKey;
+        };
+      };
+    };
+
+    gpg = {
+      enable = true;
+    };
   };
 
   # 3. Configure the Agent (This is the tricky part on Mac)

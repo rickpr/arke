@@ -42,7 +42,10 @@
     # MacOS Configuration: Run with `darwin-rebuild switch --flake .#macbook`
     darwinConfigurations.macbook = darwin.lib.darwinSystem {
       system = vars.macSystem;
-      specialArgs = {inherit emacs-overlay ghostty-shaders vars; user = vars.user;};
+      specialArgs = {
+        inherit emacs-overlay ghostty-shaders vars;
+        user = vars.user;
+      };
       modules = [
         ./darwin.nix
         home-manager.darwinModules.home-manager
@@ -53,7 +56,10 @@
             useGlobalPkgs = true;
             useUserPackages = true;
             users.${vars.user} = ./home.nix;
-            extraSpecialArgs = {inherit emacs-overlay ghostty-shaders oh-my-tmux vars; user = vars.user;};
+            extraSpecialArgs = {
+              inherit emacs-overlay ghostty-shaders oh-my-tmux vars;
+              user = vars.user;
+            };
           };
         }
       ];
@@ -63,7 +69,10 @@
     homeConfigurations.arch = home-manager.lib.homeManagerConfiguration {
       pkgs = npkgs.legacyPackages.${vars.linuxSystem};
       modules = [./home.nix];
-      extraSpecialArgs = {inherit emacs-overlay vars; user = vars.user;};
+      extraSpecialArgs = {
+        inherit emacs-overlay vars;
+        user = vars.user;
+      };
     };
   };
 }
