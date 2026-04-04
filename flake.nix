@@ -62,7 +62,7 @@
     # Arch Home Configuration: Run with `home-manager switch --flake .#linux`
     homeConfigurations.linux = home-manager.lib.homeManagerConfiguration {
       pkgs = npkgs.legacyPackages.${vars.linuxSystem};
-      modules = [./home.nix];
+      modules = [./home.nix ./linux.nix];
       extraSpecialArgs = {inherit emacs-overlay ghostty-shaders oh-my-tmux vars; user = vars.user;};
     };
   };

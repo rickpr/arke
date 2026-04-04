@@ -32,9 +32,9 @@
     fzf
     netlify-cli
     nodejs
-    nodePackages.firebase-tools
-    nodePackages.stylelint
-    nodePackages.js-beautify
+    firebase-tools
+    stylelint
+    js-beautify
     openssl
     opencode
     pandoc
