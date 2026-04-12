@@ -151,6 +151,7 @@
           email = vars.email;
           signingkey = vars.signingKey;
         };
+        commit.gpgsign = true;
       };
     };
 
