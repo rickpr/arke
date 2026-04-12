@@ -36,6 +36,7 @@
     # CLI tools via Brew (only if Nix version is broken)
     brews = [
       "beads"
+      "gh"
       "ispell"
       "xcodegen"
       "sheeki03/tap/tirith"
