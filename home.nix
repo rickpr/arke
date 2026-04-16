@@ -30,6 +30,7 @@
     ripgrep
     fd
     fzf
+    gh
     netlify-cli
     nodejs
     firebase-tools
