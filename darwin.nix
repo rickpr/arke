@@ -79,7 +79,7 @@
   # Native Postgres setup
   services.postgresql = {
     enable = true;
-    package = pkgs.postgresql_17;
+    package = pkgs.postgresql;
     dataDir = "/Users/${user}/Library/Application Support/Postgres";
   };
 
