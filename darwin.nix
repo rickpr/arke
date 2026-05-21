@@ -39,6 +39,7 @@
       "gh"
       "ispell"
       "xcodegen"
+      "periphery"
       "sheeki03/tap/tirith"
       "swiftlint"
     ];

@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  emacs-overlay,
   ghostty-shaders,
   oh-my-tmux,
   user,
@@ -35,6 +34,7 @@
     js-beautify
     openssl
     opencode
+    p7zip
     pandoc
     pinentry_mac
     pkg-config
@@ -46,13 +46,9 @@
   ];
 
   programs = {
-    # Emacs-Plus for Mac / Emacs for Arch
     emacs = {
       enable = true;
-      package =
-        if pkgs.stdenv.isDarwin
-        then pkgs.emacs-unstable # Use overlay for emacs-plus features
-        else pkgs.emacs;
+      package = pkgs.emacs;
     };
 
     direnv = {

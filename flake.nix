@@ -23,8 +23,6 @@
       url = "github:0xhckr/ghostty-shaders";
       flake = false;
     };
-
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
   };
 
   outputs = {
@@ -32,7 +30,6 @@
     npkgs,
     darwin,
     home-manager,
-    emacs-overlay,
     ghostty-shaders,
     oh-my-tmux,
     ...
@@ -43,21 +40,20 @@
     darwinConfigurations.macbook = darwin.lib.darwinSystem {
       system = vars.macSystem;
       specialArgs = {
-        inherit emacs-overlay ghostty-shaders vars;
+        inherit ghostty-shaders vars;
         user = vars.user;
       };
       modules = [
         ./darwin.nix
         home-manager.darwinModules.home-manager
         {
-          nixpkgs.overlays = [emacs-overlay.overlays.default];
           users.users.${vars.user}.home = "/Users/${vars.user}";
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
             users.${vars.user} = ./home.nix;
             extraSpecialArgs = {
-              inherit emacs-overlay ghostty-shaders oh-my-tmux vars;
+              inherit ghostty-shaders oh-my-tmux vars;
               user = vars.user;
             };
           };
@@ -70,7 +66,7 @@
       pkgs = npkgs.legacyPackages.${vars.linuxSystem};
       modules = [./home.nix];
       extraSpecialArgs = {
-        inherit emacs-overlay vars;
+        inherit vars;
         user = vars.user;
       };
     };
