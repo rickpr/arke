@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  emacs-overlay,
   ghostty-shaders,
   oh-my-tmux,
   user,
@@ -56,10 +55,7 @@
   # Emacs-Plus for Mac / Emacs for Arch
   programs.emacs = {
     enable = true;
-    package =
-      if pkgs.stdenv.isDarwin
-      then pkgs.emacs-unstable # Use overlay for emacs-plus features
-      else pkgs.emacs;
+    package = pkgs.emacs;
   };
 
   programs.direnv = {
