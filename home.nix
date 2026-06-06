@@ -19,6 +19,7 @@
     coreutils
     delta
     direnv
+    dolt
     fontconfig
     ffmpeg
     gnupg
