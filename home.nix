@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  emacs-overlay,
   ghostty-shaders,
   oh-my-tmux,
   user,
@@ -20,6 +19,7 @@
     coreutils
     delta
     direnv
+    dolt
     fontconfig
     ffmpeg
     gnupg
@@ -30,11 +30,12 @@
     ripgrep
     fd
     fzf
+    gh
     netlify-cli
     nodejs
-    nodePackages.firebase-tools
-    nodePackages.stylelint
-    nodePackages.js-beautify
+    firebase-tools
+    stylelint
+    js-beautify
     openssl
     opencode
     pandoc
@@ -55,10 +56,7 @@
   # Emacs-Plus for Mac / Emacs for Arch
   programs.emacs = {
     enable = true;
-    package =
-      if pkgs.stdenv.isDarwin
-      then pkgs.emacs-unstable # Use overlay for emacs-plus features
-      else pkgs.emacs;
+    package = pkgs.emacs;
   };
 
   programs.direnv = {
