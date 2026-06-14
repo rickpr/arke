@@ -31,11 +31,14 @@
     # Mac App Store apps (optional, needs 'mas' installed)
     # masApps = { "Xcode" = 497799835; };
 
-    # taps = [ "d12frosted/emacs-plus" ]; # If you decide to go Brew for Emacs too
-
     # CLI tools via Brew (only if Nix version is broken)
     brews = [
+      "beads"
+      "gh"
+      "ispell"
       "xcodegen"
+      "periphery"
+      "sheeki03/tap/tirith"
       "swiftlint"
     ];
 

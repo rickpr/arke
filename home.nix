@@ -38,6 +38,7 @@
     js-beautify
     openssl
     opencode
+    p7zip
     pandoc
     pkg-config
     python314
@@ -53,110 +54,133 @@
     pinentry-gtk2
   ];
 
-  # Emacs-Plus for Mac / Emacs for Arch
-  programs.emacs = {
-    enable = true;
-    package = pkgs.emacs;
-  };
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
-
-  programs.zsh = {
-    enable = true;
-    autosuggestion.enable = true; # Suggests commands as you type (gray text)
-    syntaxHighlighting.enable = true; # Colors commands as you type (red/green)
-
-    initContent = ''
-      [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-      [[ ! -f ~/.zshrc_local ]] || source ~/.zshrc_local
-      eval "$(direnv hook zsh)"
-    '';
-
-    # 1. Enable Oh-My-Zsh
-    oh-my-zsh = {
+  programs = {
+    emacs = {
       enable = true;
-      theme = "powerlevel10k/powerlevel10k";
-      # Create a ZSH_CUSTOM dir with the right theme directory structure
-      custom = toString (pkgs.runCommand "omz-custom" {} ''
-        mkdir -p $out/themes
-        ln -s ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k $out/themes/powerlevel10k
-      '');
-      plugins =
-        [
-          "git"
-          "sudo"
-          "docker"
-          "colored-man-pages"
-          "direnv"
-        ]
-        ++ (
+      package = pkgs.emacs;
+    };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    java = {
+      enable = true;
+      package = pkgs.jdk;
+    };
+
+    zsh = {
+      enable = true;
+      autosuggestion.enable = true; # Suggests commands as you type (gray text)
+      syntaxHighlighting.enable = true; # Colors commands as you type (red/green)
+      enableCompletion = true;
+
+      history = {
+        size = 50000;
+        save = 50000;
+        ignoreDups = true;
+        ignoreSpace = true; # a leading space keeps a command out of history
+        share = true;
+        extended = true;
+      };
+
+      initContent = ''
+        [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+        [[ ! -f ~/.zshrc_local ]] || source ~/.zshrc_local
+
+        bindkey -v
+        KEYTIMEOUT=1 # 10ms, so Esc into normal mode feels instant
+
+        # Ctrl+R / Ctrl+S: incremental history search, backward / forward.
+        # stty frees Ctrl+S from terminal flow control (XOFF) so zle gets it.
+        stty -ixon 2>/dev/null
+        bindkey -M viins '^R' history-incremental-pattern-search-backward
+        bindkey -M viins '^S' history-incremental-pattern-search-forward
+        bindkey -M vicmd '^R' history-incremental-pattern-search-backward
+        bindkey -M vicmd '^S' history-incremental-pattern-search-forward
+
+        setopt interactive_comments auto_cd extended_glob
+
+        # Case-insensitive completion with an arrow-navigable, colored menu.
+        zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+        zstyle ':completion:*' menu select
+        zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
+
+        # zsh leaves these unbound by default:
+        bindkey '^[[H'  beginning-of-line # Home
+        bindkey '^[[F'  end-of-line       # End
+        bindkey '^[OH'  beginning-of-line # Home (application cursor mode)
+        bindkey '^[OF'  end-of-line       # End  (application cursor mode)
+        bindkey '^[[1~' beginning-of-line # Home (vt/linux console)
+        bindkey '^[[4~' end-of-line       # End  (vt/linux console)
+        bindkey '^[[3~' delete-char       # Delete
+      '';
+
+      plugins = [
+        {
+          name = "powerlevel10k";
+          src = pkgs.zsh-powerlevel10k;
+          file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+        }
+      ];
+
+      sessionVariables = {
+        NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
+        PATH = "$HOME/.npm-global/bin:$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      };
+
+      shellAliases = {
+        ls = "gls --color=auto";
+        ll = "ls -laF --color=auto";
+        la = "ls -A --color=auto";
+        l = "ls -CF --color=auto";
+        vim = "nvim";
+        vi = "nvim";
+      };
+    };
+
+    bash = {
+      enable = true;
+      enableCompletion = true;
+      bashrcExtra = ''
+        [[ ! -f ~/.bashrc_local ]] || source ~/.bashrc_local
+        eval "$(direnv hook bash)"
+      '';
+      shellAliases = config.programs.zsh.shellAliases;
+      sessionVariables = config.programs.zsh.sessionVariables;
+    };
+
+    git = {
+      enable = true;
+      settings = {
+        init.defaultBranch = "main";
+        push.autoSetupRemote = true;
+        credential.helper =
           if pkgs.stdenv.isDarwin
-          then ["brew" "macos"]
-          else ["archlinux"]
-        );
-    };
-
-    sessionVariables = {
-      PATH = "$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-    };
-
-    shellAliases = {
-      ls = "gls --color=auto";
-      ll = "ls -laF --color=auto";
-      la = "ls -A --color=auto";
-      l = "ls -CF --color=auto";
-    };
-  };
-
-  programs.zsh.shellAliases = {
-    vim = "nvim";
-    vi = "nvim";
-  };
-
-  programs.bash = {
-    enable = true;
-    enableCompletion = true;
-    bashrcExtra = ''
-      [[ ! -f ~/.bashrc_local ]] || source ~/.bashrc_local
-      eval "$(direnv hook bash)"
-    '';
-    shellAliases = config.programs.zsh.shellAliases;
-    sessionVariables = config.programs.zsh.sessionVariables;
-  };
-
-  programs.git = {
-    enable = true;
-    settings = {
-      init.defaultBranch = "main";
-      push.autoSetupRemote = true;
-      credential.helper =
-        if pkgs.stdenv.isDarwin
-        then "osxkeychain"
-        else "cache";
-      core = {
-        editor = "nvim";
-        pager = "delta";
-      };
-      interactive.diffFilter = "delta --color-only";
-      delta.navigate = true;
-      merge.conflictStyle = "zdiff3";
-      user = {
-        name = vars.fullName;
-        email = vars.email;
-        signingkey = vars.signingKey;
+          then "osxkeychain"
+          else "cache";
+        core = {
+          editor = "nvim";
+          pager = "delta";
+        };
+        interactive.diffFilter = "delta --color-only";
+        delta.navigate = true;
+        merge.conflictStyle = "zdiff3";
+        user = {
+          name = vars.fullName;
+          email = vars.email;
+          signingkey = vars.signingKey;
+        };
+        commit.gpgsign = true;
       };
     };
-  };
 
-  # 2. Configure GPG
-  programs.gpg = {
-    enable = true;
-    # settings = { ... }; # Optional: Add your keyserver or default-key here
+    gpg = {
+      enable = true;
+    };
   };
 
   # 3. Configure the Agent
