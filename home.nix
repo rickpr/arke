@@ -7,52 +7,54 @@
   user,
   vars,
   ...
-}: {
+}:
+{
   home.username = user;
-  home.homeDirectory =
-    if pkgs.stdenv.isDarwin
-    then "/Users/${user}"
-    else "/home/${user}";
+  home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${user}" else "/home/${user}";
 
-  home.packages = with pkgs; [
-    cmake
-    coreutils
-    delta
-    direnv
-    dolt
-    fontconfig
-    ffmpeg
-    gnupg
-    jq
-    ktlint
-    libtool
-    nix-direnv
-    ripgrep
-    fd
-    fzf
-    gh
-    netlify-cli
-    nodejs
-    firebase-tools
-    stylelint
-    js-beautify
-    openssl
-    opencode
-    p7zip
-    pandoc
-    pkg-config
-    python314
-    shellcheck
-    uv
+  home.packages =
+    with pkgs;
+    [
+      cmake
+      coreutils
+      delta
+      direnv
+      dolt
+      fontconfig
+      ffmpeg
+      gnupg
+      jq
+      ktlint
+      libtool
+      nix-direnv
+      ripgrep
+      fd
+      fzf
+      gh
+      netlify-cli
+      nodejs
+      firebase-tools
+      stylelint
+      js-beautify
+      openssl
+      opencode
+      p7zip
+      pandoc
+      pkg-config
+      python314
+      shellcheck
+      uv
 
-    (writeShellScriptBin "gls" "exec ${coreutils}/bin/ls \"$@\"")
-  ] ++ lib.optionals pkgs.stdenv.isDarwin [
-    pinentry_mac
-  ] ++ lib.optionals pkgs.stdenv.isLinux [
-    neovim
-    tmux
-    pinentry-gtk2
-  ];
+      (writeShellScriptBin "gls" "exec ${coreutils}/bin/ls \"$@\"")
+    ]
+    ++ lib.optionals pkgs.stdenv.isDarwin [
+      pinentry_mac
+    ]
+    ++ lib.optionals pkgs.stdenv.isLinux [
+      neovim
+      tmux
+      pinentry-gtk2
+    ];
 
   programs = {
     emacs = {
@@ -126,8 +128,7 @@
       ];
 
       sessionVariables = {
-        NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
-        PATH = "$HOME/.npm-global/bin:$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
+        PATH = "$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
         EDITOR = "nvim";
         VISUAL = "nvim";
       };
@@ -158,10 +159,7 @@
       settings = {
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
-        credential.helper =
-          if pkgs.stdenv.isDarwin
-          then "osxkeychain"
-          else "cache";
+        credential.helper = if pkgs.stdenv.isDarwin then "osxkeychain" else "cache";
         core = {
           editor = "nvim";
           pager = "delta";
@@ -202,13 +200,16 @@
       '';
     };
 
-    ".emacs.d".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/emacs";
+    ".emacs.d".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/emacs";
 
     # The local overrides MUST be in the root of home as .tmux.conf.local
     ".tmux.conf".source = "${oh-my-tmux}/.tmux.conf";
-    ".tmux.conf.local".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/arke/dotfiles/tmux.conf.local";
+    ".tmux.conf.local".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/arke/dotfiles/tmux.conf.local";
   };
-  xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/arke/dotfiles/ghostty-config";
+  xdg.configFile."ghostty/config".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/arke/dotfiles/ghostty-config";
   xdg.configFile."ghostty/shaders".source = ghostty-shaders;
 
   home.stateVersion = "25.11";
