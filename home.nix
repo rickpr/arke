@@ -163,6 +163,7 @@
         core = {
           editor = "nvim";
           pager = "delta";
+          excludesFile = "~/.gitignore";
         };
         interactive.diffFilter = "delta --color-only";
         delta.navigate = true;
