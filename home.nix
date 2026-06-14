@@ -65,30 +65,48 @@
       enable = true;
       autosuggestion.enable = true; # Suggests commands as you type (gray text)
       syntaxHighlighting.enable = true; # Colors commands as you type (red/green)
+      enableCompletion = true;
+
+      history = {
+        size = 50000;
+        save = 50000;
+        ignoreDups = true;
+        ignoreSpace = true; # a leading space keeps a command out of history
+        share = true;
+        extended = true;
+      };
 
       initContent = ''
         [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
         [[ ! -f ~/.zshrc_local ]] || source ~/.zshrc_local
-        eval "$(direnv hook zsh)"
-      '';
 
-      # 1. Enable Oh-My-Zsh
-      oh-my-zsh = {
-        enable = true;
-        plugins =
-          [
-            "git"
-            "sudo"
-            "docker"
-            "colored-man-pages"
-            "direnv"
-          ]
-          ++ (
-            if pkgs.stdenv.isDarwin
-            then ["brew" "macos"]
-            else ["archlinux"]
-          );
-      };
+        bindkey -v
+        KEYTIMEOUT=1 # 10ms, so Esc into normal mode feels instant
+
+        # Ctrl+R / Ctrl+S: incremental history search, backward / forward.
+        # stty frees Ctrl+S from terminal flow control (XOFF) so zle gets it.
+        stty -ixon 2>/dev/null
+        bindkey -M viins '^R' history-incremental-pattern-search-backward
+        bindkey -M viins '^S' history-incremental-pattern-search-forward
+        bindkey -M vicmd '^R' history-incremental-pattern-search-backward
+        bindkey -M vicmd '^S' history-incremental-pattern-search-forward
+
+        setopt interactive_comments auto_cd extended_glob
+
+        # Case-insensitive completion with an arrow-navigable, colored menu.
+        zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+        zstyle ':completion:*' menu select
+        zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
+
+        # zsh leaves these unbound by default:
+        bindkey '^[[H'  beginning-of-line # Home
+        bindkey '^[[F'  end-of-line       # End
+        bindkey '^[OH'  beginning-of-line # Home (application cursor mode)
+        bindkey '^[OF'  end-of-line       # End  (application cursor mode)
+        bindkey '^[[1~' beginning-of-line # Home (vt/linux console)
+        bindkey '^[[4~' end-of-line       # End  (vt/linux console)
+        bindkey '^[[3~' delete-char       # Delete
+      '';
 
       plugins = [
         {
