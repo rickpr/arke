@@ -25,41 +25,56 @@
     };
   };
 
-  outputs = {
-    self,
-    npkgs,
-    darwin,
-    home-manager,
-    ghostty-shaders,
-    oh-my-tmux,
-    ...
-  }: let
-    vars = import ./variables.nix;
-  in {
-    # MacOS Configuration: Run with `darwin-rebuild switch --flake .#macbook`
-    darwinConfigurations.macbook = darwin.lib.darwinSystem {
-      system = vars.macSystem;
-      specialArgs = {inherit ghostty-shaders vars; user = vars.user;};
-      modules = [
-        ./darwin.nix
-        home-manager.darwinModules.home-manager
-        {
-          users.users.${vars.user}.home = "/Users/${vars.user}";
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.${vars.user} = ./home.nix;
-            extraSpecialArgs = {inherit ghostty-shaders oh-my-tmux vars; user = vars.user;};
-          };
-        }
-      ];
-    };
+  outputs =
+    {
+      self,
+      npkgs,
+      darwin,
+      home-manager,
+      ghostty-shaders,
+      oh-my-tmux,
+      ...
+    }:
+    let
+      vars = import ./variables.nix;
+    in
+    {
+      # MacOS Configuration: Run with `darwin-rebuild switch --flake .#macbook`
+      darwinConfigurations.macbook = darwin.lib.darwinSystem {
+        system = vars.macSystem;
+        specialArgs = {
+          inherit ghostty-shaders vars;
+          user = vars.user;
+        };
+        modules = [
+          ./darwin.nix
+          home-manager.darwinModules.home-manager
+          {
+            users.users.${vars.user}.home = "/Users/${vars.user}";
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.${vars.user} = ./home.nix;
+              extraSpecialArgs = {
+                inherit ghostty-shaders oh-my-tmux vars;
+                user = vars.user;
+              };
+            };
+          }
+        ];
+      };
 
-    # Arch Home Configuration: Run with `home-manager switch --flake .#linux`
-    homeConfigurations.linux = home-manager.lib.homeManagerConfiguration {
-      pkgs = npkgs.legacyPackages.${vars.linuxSystem};
-      modules = [./home.nix ./linux.nix];
-      extraSpecialArgs = {inherit ghostty-shaders oh-my-tmux vars; user = vars.user;};
+      # Arch Home Configuration: Run with `home-manager switch --flake .#linux`
+      homeConfigurations.linux = home-manager.lib.homeManagerConfiguration {
+        pkgs = npkgs.legacyPackages.${vars.linuxSystem};
+        modules = [
+          ./home.nix
+          ./linux.nix
+        ];
+        extraSpecialArgs = {
+          inherit ghostty-shaders oh-my-tmux vars;
+          user = vars.user;
+        };
+      };
     };
-  };
 }
