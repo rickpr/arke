@@ -156,6 +156,10 @@
 
     git = {
       enable = true;
+      ignores = [
+        ".opencode"
+        "**/.claude/settings.local.json"
+      ];
       settings = {
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
@@ -163,7 +167,6 @@
         core = {
           editor = "nvim";
           pager = "delta";
-          excludesFile = "~/.gitignore";
         };
         interactive.diffFilter = "delta --color-only";
         delta.navigate = true;
