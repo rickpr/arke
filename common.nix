@@ -6,7 +6,7 @@
     fzf
     jq
     direnv
-    postgresql_17
+    postgresql
     tmux
   ];
 }
