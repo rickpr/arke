@@ -1,7 +1,7 @@
 font-family = "Inconsolata Nerd Font"
 font-size = 16
 keybind = global:ctrl+backquote=toggle_quick_terminal
-custom-shader = ./shaders/cubes.glsl
+# custom-shader = ./shaders/cubes.glsl
 custom-shader = ./shaders/cursor_blaze.glsl
 custom-shader = ./shaders/glow-rgbsplit-twitchy.glsl
 theme = Molokai
