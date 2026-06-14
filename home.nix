@@ -156,6 +156,10 @@
 
     git = {
       enable = true;
+      ignores = [
+        ".opencode"
+        "**/.claude/settings.local.json"
+      ];
       settings = {
         init.defaultBranch = "main";
         push.autoSetupRemote = true;

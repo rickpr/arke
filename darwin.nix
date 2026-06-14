@@ -40,6 +40,7 @@
       "periphery"
       "sheeki03/tap/tirith"
       "swiftlint"
+      "xcode-build-server"
     ];
 
     casks = [
