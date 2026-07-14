@@ -1,12 +1,18 @@
 {
   pkgs,
   config,
+  lib,
   user,
   vars,
   ...
 }: {
   imports = [./common.nix];
   system.primaryUser = user;
+
+  security.pam.services.sudo_local = {
+  touchIdAuth = true;
+  reattach = true;
+};
 
   nix.settings = {
     experimental-features = ["nix-command" "flakes"];
@@ -80,11 +86,15 @@
     done
   '';
 
-  # Native Postgres setup
+  # Native Postgres setup (starts on demand only)
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql;
     dataDir = "/Users/${user}/Library/Application Support/Postgres";
+  };
+  launchd.user.agents.postgresql.serviceConfig = {
+    KeepAlive = lib.mkForce false;
+    RunAtLoad = lib.mkForce false;
   };
 
   networking.computerName = vars.macHostname; # The "Human" name (AirDrop, Finder)
