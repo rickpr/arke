@@ -46,6 +46,7 @@
       "periphery"
       "sheeki03/tap/tirith"
       "swiftlint"
+      "xcbeautify"
       "xcode-build-server"
     ];
 
