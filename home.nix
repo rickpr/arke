@@ -15,6 +15,7 @@
   home.packages =
     with pkgs;
     [
+      agent-browser
       cmake
       coreutils
       delta
@@ -40,6 +41,7 @@
       opencode
       p7zip
       pandoc
+      pass
       pkg-config
       python314
       shellcheck
@@ -53,7 +55,7 @@
     ++ lib.optionals pkgs.stdenv.isLinux [
       neovim
       tmux
-      pinentry-gtk2
+      pinentry-gnome3
     ];
 
   programs = {
@@ -103,6 +105,7 @@
         bindkey -M vicmd '^S' history-incremental-pattern-search-forward
 
         setopt interactive_comments auto_cd extended_glob
+        setopt auto_pushd
 
         # Case-insensitive completion with an arrow-navigable, colored menu.
         zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
@@ -192,7 +195,7 @@
     enable = true;
     defaultCacheTtl = 600;
     maxCacheTtl = 7200;
-    pinentry.package = pkgs.pinentry-gtk2;
+    pinentry.package = pkgs.pinentry-gnome3;
   };
 
   home.file = {
