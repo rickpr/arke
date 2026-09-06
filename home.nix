@@ -9,6 +9,8 @@
   ...
 }:
 {
+  imports = [ ./common.nix ];
+
   home.username = user;
   home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${user}" else "/home/${user}";
 
@@ -19,18 +21,13 @@
       cmake
       coreutils
       delta
-      direnv
       dolt
       fontconfig
       ffmpeg
       gnupg
-      jq
       ktlint
       libtool
       nix-direnv
-      ripgrep
-      fd
-      fzf
       gh
       netlify-cli
       nodejs
@@ -53,8 +50,6 @@
       pinentry_mac
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [
-      neovim
-      tmux
       pinentry-gnome3
     ];
 

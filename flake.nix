@@ -76,5 +76,18 @@
           user = vars.user;
         };
       };
+
+      devShells = {
+        "${vars.macSystem}".default = npkgs.legacyPackages.${vars.macSystem}.mkShell {
+          packages = [
+            (home-manager.packages.${vars.macSystem}.home-manager)
+            (darwin.packages.${vars.macSystem}.darwin-rebuild)
+          ];
+        };
+
+        "${vars.linuxSystem}".default = npkgs.legacyPackages.${vars.linuxSystem}.mkShell {
+          packages = [ (home-manager.packages.${vars.linuxSystem}.home-manager) ];
+        };
+      };
     };
 }
