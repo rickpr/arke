@@ -7,6 +7,7 @@
     fzf
     jq
     direnv
+    pnpm
     postgresql
     tmux
   ];

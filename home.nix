@@ -40,6 +40,7 @@
       opencode
       p7zip
       pandoc
+      pass
       pkg-config
       python314
       shellcheck
