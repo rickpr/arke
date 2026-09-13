@@ -8,6 +8,8 @@
     jq
     direnv
     postgresql
+    pnpm
     tmux
+    inlyne
   ];
 }
