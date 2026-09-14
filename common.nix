@@ -1,5 +1,5 @@
-{pkgs, ...}: {
-  environment.systemPackages = with pkgs; [
+{ pkgs, ... }: {
+  home.packages = with pkgs; [
     fastfetch
     neovim
     ripgrep
@@ -9,6 +9,8 @@
     direnv
     pnpm
     postgresql
+    pnpm
     tmux
+    inlyne
   ];
 }

@@ -1,6 +1,6 @@
-{pkgs, ...}: {
-  home.packages = with pkgs; [
-    postgresql
-    tmux
+{ pkgs, ... }: {
+  home.packages = [
+    pkgs.nerd-fonts.inconsolata
+    pkgs.nerd-fonts.symbols-only
   ];
 }

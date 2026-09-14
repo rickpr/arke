@@ -6,7 +6,6 @@
   vars,
   ...
 }: {
-  imports = [./common.nix];
   system.primaryUser = user;
 
   security.pam.services.sudo_local = {
@@ -18,16 +17,10 @@
     experimental-features = ["nix-command" "flakes"];
   };
 
-  environment.systemPackages = [
-    pkgs.neovim
-    pkgs.pinentry_mac
-  ];
-
   environment.systemPath = [
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"
   ];
-
   fonts.packages = [
     pkgs.nerd-fonts.inconsolata
     pkgs.nerd-fonts.symbols-only
