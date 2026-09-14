@@ -129,12 +129,18 @@
       ];
 
       envExtra = ''
-        export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/etc/profiles/per-user/${user}/bin:$PATH"
+        ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
+          export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/etc/profiles/per-user/${user}/bin:$PATH"
+        ''}
         [[ ! -f ~/.zshenv_local ]] || source ~/.zshenv_local
       '';
 
       sessionVariables = {
-        PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:/etc/profiles/per-user/${user}/bin:$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
+        PATH =
+          if pkgs.stdenv.hostPlatform.isDarwin then
+            "/opt/homebrew/bin:/opt/homebrew/sbin:/etc/profiles/per-user/${user}/bin:$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH"
+          else
+            "$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH";
         EDITOR = "nvim";
         VISUAL = "nvim";
       };

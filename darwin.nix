@@ -23,6 +23,11 @@
     pkgs.pinentry_mac
   ];
 
+  environment.systemPath = [
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+  ];
+
   fonts.packages = [
     pkgs.nerd-fonts.inconsolata
     pkgs.nerd-fonts.symbols-only
