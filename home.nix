@@ -35,7 +35,6 @@
       stylelint
       js-beautify
       openssl
-      opencode
       p7zip
       pandoc
       pass
@@ -90,6 +89,11 @@
 
         bindkey -v
         KEYTIMEOUT=1 # 10ms, so Esc into normal mode feels instant
+
+        # tmux/Ghostty CSI-u shifted keys at the Zsh prompt.
+        bindkey -M viins '^[[13;2u' accept-line
+        bindkey -M viins '^[[127;2u' backward-delete-char
+        bindkey -M viins -s '^[[32;2u' ' '
 
         # Ctrl+R / Ctrl+S: incremental history search, backward / forward.
         # stty frees Ctrl+S from terminal flow control (XOFF) so zle gets it.
@@ -168,6 +172,7 @@
       ignores = [
         ".opencode"
         "**/.claude/settings.local.json"
+        "beads.gate.lock"
       ];
       settings = {
         init.defaultBranch = "main";
